@@ -11,6 +11,7 @@ import {
 import React, { useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { colors } from "../styles/styles";
+import { Headline, Searchbar } from "react-native-paper";
 
 const SearchModel = ({
   searchQuery,
@@ -19,7 +20,8 @@ const SearchModel = ({
   products = [],
 }) => {
   const navigate = useNavigation();
-  const backAction = () => {
+  {
+    /*const backAction = () => {
     setSearchQuery("");
     setActiveSearch(false);
     return true;
@@ -29,7 +31,8 @@ const SearchModel = ({
     return () => {
       BackHandler.removeEventListener("hardwareBackPress", backAction);
     };
-  });
+  });*/
+  }
   return (
     <View
       style={{
@@ -44,7 +47,7 @@ const SearchModel = ({
       }}
     >
       <SafeAreaView>
-        <SearchBar
+        <Searchbar
           placeholder="Search..."
           onChangeText={(e) => setSearchQuery(e)}
           value={searchQuery}
