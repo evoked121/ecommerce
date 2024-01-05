@@ -10,7 +10,7 @@ const Footer = ({ activeRoute = "home" }) => {
 
   /*const { loading, isAuthenticated } = useSelector((state) => state.user);*/
   const loading = false;
-  const isAuthenticated = false;
+  const isAuthenticated = true;
 
   const navigatationHandler = (key) => {
     switch (key) {

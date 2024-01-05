@@ -9,7 +9,7 @@ import { useNavigation } from "@react-navigation/native";
 /*import { useDispatch, useSelector } from "react-redux";
 import { Toast } from "react-native-toast-message/lib/src/Toast";*/
 
-const cartItems = [
+export const cartItems = [
   {
     name: "macbook",
     image: defaultImg,
