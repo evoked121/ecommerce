@@ -11,14 +11,18 @@ import Payment from "./screens/Payment.jsx";
 import Login from "./screens/Login.jsx";
 import ForgetPassword from "./screens/ForgetPassword.jsx";
 import SignUp from "./screens/SignUp.jsx";
+import UpdateProfile from "./screens/UpdateProfile.jsx";
 import Verify from "./screens/Verify.jsx";
 import Camera from "./screens/Camera.jsx";
 import Profile from "./screens/Profile.jsx";
-import UpdateProfile from "./screens/UpdateProfile.jsx";
 import ChangePassword from "./screens/ChangePassword.jsx";
 import Orders from "./screens/Orders.jsx";
 import AdminPanel from "./screens/Admin/AdminPanel.jsx";
-import UpdateProduct from "./screens/UpdateProduct.jsx";
+import UpdateProduct from "./screens/Admin/UpdateProduct.jsx";
+import Categories from "./screens/Admin/Categories.jsx";
+import AdminOrders from "./screens/Admin/AdminOrders.jsx";
+import NewProduct from "./screens/Admin/NewProduct.jsx";
+import ProductImages from "./screens/Admin/ProductImages.jsx";
 
 const Stack = createNativeStackNavigator();
 
@@ -44,9 +48,14 @@ const Main = () => {
           <Stack.Screen name="updateprofile" component={UpdateProfile} />
           <Stack.Screen name="changepassword" component={ChangePassword} />
           <Stack.Screen name="orders" component={Orders} />
-          <Stack.Screen name="updateproduct" component={UpdateProduct} />
+
           {/* Admin Routes*/}
           <Stack.Screen name="adminpanel" component={AdminPanel} />
+          <Stack.Screen name="categories" component={Categories} />
+          <Stack.Screen name="adminorders" component={AdminOrders} />
+          <Stack.Screen name="updateproduct" component={UpdateProduct} />
+          <Stack.Screen name="newproduct" component={NewProduct} />
+          <Stack.Screen name="productimages" component={ProductImages} />
         </Stack.Group>
       </Stack.Navigator>
       <Toast position="bottom" bottomOffset={20} />

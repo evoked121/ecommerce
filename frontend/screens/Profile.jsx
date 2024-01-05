@@ -57,6 +57,12 @@ const Profile = ({ navigation, route }) => {
     }
   };
 
+  useEffect(() => {
+    if (route.params?.image) {
+      setAvatar(route.params.image);
+    }
+  }, []);
+
   return (
     <>
       <View style={defaultStyle}>

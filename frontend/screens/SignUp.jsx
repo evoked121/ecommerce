@@ -31,6 +31,10 @@ const SignUp = ({ navigation, route }) => {
   const disableBtn =
     !name || !email || !password || !address || !city || !country || !pinCode;
 
+  useEffect(() => {
+    if (route.params?.image) setAvatar(route.params.image);
+  }, []);
+
   return (
     <>
       <View style={defaultStyle}>
