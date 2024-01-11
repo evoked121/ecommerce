@@ -9,13 +9,13 @@ import {
 } from "../styles/styles";
 import { Button, TextInput } from "react-native-paper";
 import Header from "../components/Header";
-/*import { useDispatch, useSelector } from "react-redux";
-import { updateProfile } from "../redux/actions/otherAction";
-import { useMessageAndErrorOther } from "../utils/hooks";*/
-
-const user = null;
+import { useDispatch, useSelector } from "react-redux";
+import { updateProfile } from "../redux/actions/otherActions.js";
+import { useMessageAndErrorOther } from "../utils/hooks.js";
 
 const UpdateProfile = ({ navigation }) => {
+  const { user } = useSelector((state) => state.user);
+
   const [name, setName] = useState(user?.name);
   const [email, setEmail] = useState(user?.email);
   const [address, setAddress] = useState(user?.address);
@@ -23,11 +23,13 @@ const UpdateProfile = ({ navigation }) => {
   const [country, setCountry] = useState(user?.country);
   const [pinCode, setPinCode] = useState(user?.pinCode.toString());
 
-  const submitHandler = () => {
-    navigation.navigate("verify");
-  };
+  const dispatch = useDispatch();
 
-  const loading = false;
+  const loading = useMessageAndErrorOther(dispatch, navigation, "profile");
+
+  const submitHandler = () => {
+    dispatch(updateProfile(name, email, address, city, country, pinCode));
+  };
 
   return (
     <View style={defaultStyle}>

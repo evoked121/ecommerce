@@ -1,46 +1,66 @@
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { colors, defaultImg, defaultStyle } from "../styles/styles";
 import Header from "../components/Header";
 import { Avatar, Button } from "react-native-paper";
 import SearchModel from "../components/SearchModel";
 import ProductCard from "../components/ProductCard";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import Footer from "../components/Footer";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllProducts } from "../redux/actions/productAction.js";
+import { useSetCategories } from "../utils/hooks.js";
+import Toast from "react-native-toast-message";
 
 const categories = [
   { category: "Nice", _id: "sjdjd" },
   { category: "Football", _id: "sjdjdkk" },
 ];
 
-const products = [
-  {
-    price: 233,
-    stock: 5,
-    name: "Sample",
-    _id: "dfesef",
-    images: [
-      {
-        url: defaultImg,
-      },
-    ],
-  },
-];
-
 const Home = () => {
   const [activeSearch, setActiveSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [category, setCategory] = useState("");
+  const [categories, setCategories] = useState([]);
 
   const categoryButtonHandler = (id) => {
     setCategory(id);
   };
 
-  const addToCardHandler = (id) => {
-    console.log("add to cart", id);
+  const addToCardHandler = (id, name, price, image, stock) => {
+    if (stock === 0)
+      return Toast.show({
+        type: "error",
+        text1: "Out Of Stock",
+      });
+    dispatch({
+      type: "addToCart",
+      payload: {
+        product: id,
+        name,
+        price,
+        image,
+        stock,
+        quantity: 1,
+      },
+    });
+    Toast.show({
+      type: "success",
+      text1: "Added To Cart",
+    });
   };
 
   const navigate = useNavigation();
+  const dispatch = useDispatch();
+  const isFocused = useIsFocused();
+
+  const { products } = useSelector((state) => state.product);
+
+  useSetCategories(setCategories, isFocused);
+
+  useEffect(() => {
+    dispatch(getAllProducts(searchQuery, category));
+  }, [dispatch, searchQuery, category, isFocused]);
 
   return (
     <>

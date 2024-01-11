@@ -6,8 +6,8 @@ import Heading from "../components/Heading";
 import { Button } from "react-native-paper";
 import CartItem from "../components/CartItem";
 import { useNavigation } from "@react-navigation/native";
-/*import { useDispatch, useSelector } from "react-redux";
-import { Toast } from "react-native-toast-message/lib/src/Toast";*/
+import { useDispatch, useSelector } from "react-redux";
+import { Toast } from "react-native-toast-message/lib/src/Toast";
 
 export const cartItems = [
   {
@@ -30,8 +30,46 @@ export const cartItems = [
 
 const Cart = () => {
   const navigate = useNavigation();
-  const incrementHandler = (id, qty, stock) => {};
-  const decrementHandler = (id, qty, stock) => {};
+
+  const dispatch = useDispatch();
+  const { cartItems } = useSelector((state) => state.cart);
+
+  const incrementHandler = (id, name, price, image, stock, quantity) => {
+    const newQty = quantity + 1;
+    if (stock <= quantity)
+      return Toast.show({
+        type: "error",
+        text1: "Maximum value added",
+      });
+    dispatch({
+      type: "addToCart",
+      payload: {
+        product: id,
+        name,
+        price,
+        image,
+        stock,
+        quantity: newQty,
+      },
+    });
+  };
+  const decrementHandler = (id, name, price, image, stock, quantity) => {
+    const newQty = quantity - 1;
+
+    if (1 >= quantity) return dispatch({ type: "removeFromCart", payload: id });
+
+    dispatch({
+      type: "addToCart",
+      payload: {
+        product: id,
+        name,
+        price,
+        image,
+        stock,
+        quantity: newQty,
+      },
+    });
+  };
   return (
     <View
       style={{
@@ -52,20 +90,26 @@ const Cart = () => {
         }}
       >
         <ScrollView>
-          {cartItems.map((i, index) => (
-            <CartItem
-              key={i.product}
-              id={i.product}
-              name={i.name}
-              stock={i.stock}
-              amount={i.price}
-              imgSrc={i.image}
-              index={index}
-              qty={i.quantity}
-              incrementhandler={incrementHandler}
-              decrementHandler={decrementHandler}
-            />
-          ))}
+          {cartItems.length > 0 ? (
+            cartItems.map((i, index) => (
+              <CartItem
+                key={i.product}
+                id={i.product}
+                name={i.name}
+                stock={i.stock}
+                amount={i.price}
+                imgSrc={i.image}
+                index={index}
+                qty={i.quantity}
+                incrementhandler={incrementHandler}
+                decrementHandler={decrementHandler}
+              />
+            ))
+          ) : (
+            <Text style={{ textAlign: "center", fontSize: 18 }}>
+              No Items Yet
+            </Text>
+          )}
         </ScrollView>
       </View>
       <View
@@ -75,7 +119,7 @@ const Cart = () => {
           paddingHorizontal: 35,
         }}
       >
-        <Text>5 items</Text>
+        <Text>{cartItems.length} items</Text>
       </View>
       <TouchableOpacity
         onPress={

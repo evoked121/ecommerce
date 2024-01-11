@@ -6,17 +6,20 @@ import {
   StyleSheet,
   Image,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { colors, defaultStyle, defaultImg } from "../styles/styles";
 import Header from "../components/Header";
 import Carousel from "react-native-snap-carousel";
 import { useRef } from "react";
 import { Avatar, Button } from "react-native-paper";
 import Toast from "react-native-toast-message";
+import { useDispatch, useSelector } from "react-redux";
+import { useIsFocused } from "@react-navigation/native";
+import { getProductDetails } from "../redux/actions/productAction.js";
 
 const SLIDER_WIDTH = Dimensions.get("window").width;
 const ITEM_WIDTH = SLIDER_WIDTH;
-const iconOptions = {
+export const iconOptions = {
   size: 20,
   style: {
     borderRadius: 5,
@@ -28,21 +31,15 @@ const iconOptions = {
 
 const ProductDetails = ({ route: { params } }) => {
   const isCarousel = useRef(null);
+  //state是一个object 继续拆分
+  const {
+    product: { name, price, stock, description, images },
+  } = useSelector((state) => state.product);
+
   const [quantity, setQuantity] = useState(1);
-  const name = "mac book";
-  const price = 3474;
-  const stock = 25;
-  const description = "description";
-  const images = [
-    {
-      id: "addd",
-      url: defaultImg,
-    },
-    {
-      id: "adddc",
-      url: defaultImg,
-    },
-  ];
+
+  const dispatch = useDispatch();
+  const isFocused = useIsFocused();
 
   const incrementQty = () => {
     if (stock <= quantity)
@@ -57,16 +54,31 @@ const ProductDetails = ({ route: { params } }) => {
     setQuantity((prev) => prev - 1);
   };
   const addToCardHandler = () => {
-    if (stock == 0)
+    if (stock === 0)
       return Toast.show({
         type: "error",
         text1: "Out Of Stock",
       });
+    dispatch({
+      type: "addToCart",
+      payload: {
+        product: params.id,
+        name,
+        price,
+        image: images[0]?.url,
+        stock,
+        quantity,
+      },
+    });
     Toast.show({
       type: "success",
       text1: "Added To Cart",
     });
   };
+
+  useEffect(() => {
+    dispatch(getProductDetails(params.id));
+  }, [dispatch, params.id, isFocused]);
 
   return (
     <View

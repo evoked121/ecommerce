@@ -1,5 +1,11 @@
 import Main from "./Main";
+import { Provider } from "react-redux";
+import { store } from "./redux/store.js";
 
 export default function App() {
-  return <Main />;
+  return (
+    <Provider store={store}>
+      <Main />
+    </Provider>
+  );
 }

@@ -1,5 +1,5 @@
 import { View, Text, SafeAreaView, Platform, StatusBar } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "./screens/Home.jsx";
@@ -23,10 +23,17 @@ import Categories from "./screens/Admin/Categories.jsx";
 import AdminOrders from "./screens/Admin/AdminOrders.jsx";
 import NewProduct from "./screens/Admin/NewProduct.jsx";
 import ProductImages from "./screens/Admin/ProductImages.jsx";
+import { useDispatch } from "react-redux";
+import { loadUser } from "./redux/actions/userActions.js";
 
 const Stack = createNativeStackNavigator();
 
 const Main = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(loadUser());
+  }, [dispatch]);
   return (
     <NavigationContainer>
       <Stack.Navigator

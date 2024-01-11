@@ -20,7 +20,7 @@ const ProductCard = ({
     >
       <View
         style={{
-          width: 220,
+          width: 250,
           alignItems: "center",
           justifyContent: "space-between",
           margin: 20,
@@ -54,6 +54,7 @@ const ProductCard = ({
               color: i % 2 === 0 ? colors.color2 : colors.color3,
               fontSize: 25,
               fontWeight: "300",
+              width: "60%",
             }}
           >
             {name}
@@ -79,7 +80,7 @@ const ProductCard = ({
           }}
         >
           <Button
-            onPress={() => addToCardHandler(id, stock)}
+            onPress={() => addToCardHandler(id, name, price, image, stock)}
             textColor={i % 2 === 0 ? colors.color1 : colors.color2}
           >
             Add To Cart

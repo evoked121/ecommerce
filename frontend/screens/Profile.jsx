@@ -10,27 +10,57 @@ import { Avatar, Button } from "react-native-paper";
 import ButtonBox from "../components/ButtonBox";
 import Footer from "../components/Footer";
 import Loader from "../components/Loader";
-/*import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loadUser, logout } from "../redux/actions/userActions";
-import {
-  useMessageAndErrorOther,
-  useMessageAndErrorUser,
-} from "../utils/hooks";
+
+import { useMessageAndErrorUser } from "../utils/hooks.js";
+
 import { useIsFocused } from "@react-navigation/native";
 import mime from "mime";
+import Toast from "react-native-toast-message";
+/*
 import { updatePic } from "../redux/actions/otherAction";*/
 
-const user = {
-  name: "kevin",
-  email: "123@gmail.com",
-  role: "admin",
-};
-
 const Profile = ({ navigation, route }) => {
-  const [avatar, setAvatar] = useState(defaultImg);
-  const loading = false;
+  const { user } = useSelector((state) => state.user);
+  const [avatar, setAvatar] = useState(
+    user?.avatar ? user.avatar.url : defaultImg
+  );
 
-  const logoutHandler = () => {};
+  const dispatch = useDispatch();
+  const isFocused = useIsFocused();
+  //const loading = useMessageAndErrorUser(navigation, dispatch, "login");
+  const { loading, message, error } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (error) {
+      Toast.show({
+        type: "error",
+        text1: error,
+      });
+      dispatch({
+        type: "clearError",
+      });
+    }
+
+    if (message) {
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "login" }],
+      });
+      Toast.show({
+        type: "success",
+        text1: message,
+      });
+      dispatch({
+        type: "clearMessage",
+      });
+    }
+  }, [error, message, dispatch]);
+
+  const logoutHandler = () => {
+    dispatch(logout());
+  };
 
   const navigateHandler = (text) => {
     switch (text) {
@@ -61,7 +91,8 @@ const Profile = ({ navigation, route }) => {
     if (route.params?.image) {
       setAvatar(route.params.image);
     }
-  }, []);
+    dispatch(loadUser());
+  }, [route.params, dispatch, isFocused]);
 
   return (
     <>
